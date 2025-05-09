@@ -16,5 +16,4 @@ class OrderBookEntry {
 };
 
 
-OrderBookEntry(double _price, double _amount, std::string _timestamp, std::string _product, OrderBookType _orderType);
-the first one creates copies. the second creates references.
+// OrderBookTypeOrderBookEntry(double _price, double _amount, std::string _timestamp, std::string _product, OrderBookType _orderType);

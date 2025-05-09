@@ -7,4 +7,5 @@ OrderBookEntry::OrderBookEntry(double _price, double _amount,
       amount(_amount),
       timestamp(_timestamp),
       product(_product),
-      orderType(_orderType) {}
+      orderType(_orderType) {
+}

@@ -2,14 +2,13 @@
 #include <limits>
 #include <string>
 #include <vector>
-#include "OrderBookEntry.h"
-#include "MerkelMain.h"
 
+#include "CSVReader.h"
+#include "MerkelMain.h"
+#include "OrderBookEntry.h"
 
 int main() {
   
-  MerkelMain app{};
-  app.init();
-  // app.printMenu();  
+  CSVReader reader;
   return 0;
 }
