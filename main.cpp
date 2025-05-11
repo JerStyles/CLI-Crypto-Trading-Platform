@@ -8,7 +8,6 @@
 #include "OrderBookEntry.h"
 
 int main() {
-  
   CSVReader reader;
   return 0;
 }
