@@ -1,12 +1,14 @@
 #include "MerkelMain.h"
+
 #include <iostream>
 #include <vector>
+
+#include "CSVReader.h"
 #include "OrderBookEntry.h"
 
 MerkelMain::MerkelMain() {
 
 };
-
 
 void MerkelMain::init() {
   loadOrderBook();
@@ -18,8 +20,8 @@ void MerkelMain::init() {
   }
 };
 
-void MerkelMain::loadOrderBook(){
-
+void MerkelMain::loadOrderBook() {
+  orders = CSVReader::readCSV("order_book.csv");
 };
 
 void MerkelMain::printMenu() {
@@ -91,6 +93,17 @@ void MerkelMain::printHelp() {
 
 void MerkelMain::printMarketStats() {
   std::cout << "OrderBook contains: " << orders.size() << std::endl;
+  unsigned int bids = 0;
+  unsigned int asks = 0;
+  for (OrderBookEntry& entry : orders) {
+    if (entry.orderType == OrderBookType::ask) {
+      ++asks;
+    }
+    if (entry.orderType == OrderBookType::bid) {
+      ++bids;
+    }
+  }
+  std::cout << "OrderBook asks: " << asks << " bids: " << bids << std::endl;
 }
 
 void MerkelMain::enterOffer() {

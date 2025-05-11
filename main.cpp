@@ -8,6 +8,9 @@
 #include "OrderBookEntry.h"
 
 int main() {
-  CSVReader::readCSV("order_book.csv");
+  // CSVReader::readCSV("order_book.csv");
+  MerkelMain app{};
+  app.init();
+  
   return 0;
 }
