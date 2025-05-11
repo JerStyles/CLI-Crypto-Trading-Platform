@@ -11,17 +11,12 @@ MerkelMain::MerkelMain() {
 };
 
 void MerkelMain::init() {
-  loadOrderBook();
   int input;
   while (true) {
     printMenu();
     input = getUserOption();
     processUserOption(input);
   }
-};
-
-void MerkelMain::loadOrderBook() {
-  orders = CSVReader::readCSV("order_book.csv");
 };
 
 void MerkelMain::printMenu() {
@@ -92,17 +87,30 @@ void MerkelMain::printHelp() {
 }
 
 void MerkelMain::printMarketStats() {
-  std::cout << "OrderBook contains: " << orders.size() << std::endl;
+  for (std::string const product : orderBook.getKnownProducts()) {
+    std::cout << "Product: " << product << std::endl;
+    std::vector<OrderBookEntry> entries = orderBook.getOrders(
+        OrderBookType::ask, product, "2020/03/17 17:02:00.124758");
+
+    if (entries.empty()) {
+      std::cout << "No asks found for product: " << product << std::endl;
+      continue;
+    }
+
+    std::cout << "Asks seen: " << entries.size() << std::endl;
+    std::cout << "Max asks: " << OrderBook::getHighPrice(entries) << std::endl;
+    std::cout << "Min asks: " << OrderBook::getLowPrice(entries) << std::endl;
+  }
   unsigned int bids = 0;
   unsigned int asks = 0;
-  for (OrderBookEntry& entry : orders) {
-    if (entry.orderType == OrderBookType::ask) {
-      ++asks;
-    }
-    if (entry.orderType == OrderBookType::bid) {
-      ++bids;
-    }
-  }
+  // for (OrderBookEntry& entry : orders) {
+  //   if (entry.orderType == OrderBookType::ask) {
+  //     ++asks;
+  //   }
+  //   if (entry.orderType == OrderBookType::bid) {
+  //     ++bids;
+  //   }
+  // }
   std::cout << "OrderBook asks: " << asks << " bids: " << bids << std::endl;
 }
 
