@@ -8,6 +8,6 @@
 #include "OrderBookEntry.h"
 
 int main() {
-  CSVReader reader;
+  CSVReader::readCSV("order_book.csv");
   return 0;
 }
