@@ -28,10 +28,10 @@ void MerkelMain::printMenu() {
   std::cout << "2: Print exchange stats" << std::endl;
 
   // 3 Make an offer
-  std::cout << "3: Make an offer" << std::endl;
+  std::cout << "3: Make an Ask" << std::endl;
 
   // 4 Make a bid
-  std::cout << "4: Make a bid" << std::endl;
+  std::cout << "4: Make a Bid" << std::endl;
 
   // 5 Print wallet
   std::cout << "5: Print wallet" << std::endl;
@@ -46,8 +46,15 @@ void MerkelMain::printMenu() {
 
 int MerkelMain::getUserOption() {
   int userOption;
+  std::string line;
   std::cout << "Type in 1-6" << std::endl;
-  std::cin >> userOption;
+  std::getline(std::cin, line);
+  try {
+    userOption = std::stoi(line);
+  } catch (const std::exception& e) {
+    std::cout << "Invalid input!" << std::endl;
+  }
+
   std::cout << "Your choice: " << userOption << "\n" << std::endl;
 
   return userOption;
@@ -67,7 +74,7 @@ void MerkelMain::processUserOption(int userOption) {
   }
 
   if (userOption == 3) {
-    enterOffer();
+    enterAsk();
   }
 
   if (userOption == 4) {
@@ -92,8 +99,8 @@ void MerkelMain::printHelp() {
 void MerkelMain::printMarketStats() {
   for (std::string const product : orderBook.getKnownProducts()) {
     std::cout << "Product: " << product << std::endl;
-    std::vector<OrderBookEntry> entries = orderBook.getOrders(
-        OrderBookType::ask, product, currentTime);
+    std::vector<OrderBookEntry> entries =
+        orderBook.getOrders(OrderBookType::ask, product, currentTime);
 
     if (entries.empty()) {
       std::cout << "No asks found for product: " << product << std::endl;
@@ -117,8 +124,24 @@ void MerkelMain::printMarketStats() {
   std::cout << "OrderBook asks: " << asks << " bids: " << bids << std::endl;
 }
 
-void MerkelMain::enterOffer() {
-  std::cout << "Make an offer - enter the amout" << std::endl;
+void MerkelMain::enterAsk() {
+  std::cout << "Make an offer - enter the amount: product, price, amount, eg: "
+               "ETH/BTC, 2000, 0.5"
+            << std::endl;
+  std::string input;
+  std::getline(std::cin, input);
+  std::vector<std::string> tokens = CSVReader::tokenize(input, ',');
+  if (tokens.size() != 3) {
+    std::cout << "Bad input! " << input << std::endl;
+  } else {
+    try {
+      OrderBookEntry obe = CSVReader::stringsToOBE(
+          tokens[1], tokens[2], currentTime, tokens[0], OrderBookType::ask);
+    } catch (const std::exception& e) {
+      std::cout << " MerkelMain::enterAsk Bad input! " << std::endl;
+    }
+  }
+  std::cout << "You typed: " << input << std::endl;
 }
 
 void MerkelMain::enterBid() {
@@ -132,4 +155,13 @@ void MerkelMain::printWallet() {
 void MerkelMain::gotoNextTimeFrame() {
   std::cout << "Going to next time frame." << std::endl;
   currentTime = orderBook.getNextTime(currentTime);
+}
+
+bool isValidInput(const std::string& input) {
+  // Check if the input is a single character and is a digit
+  if (input.length() == 1 && std::isdigit(input[0])) {
+    int num = input[0] - '0';
+    return num >= 0 && num <= 6;
+  }
+  return false;
 }

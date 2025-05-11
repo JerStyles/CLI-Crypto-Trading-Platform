@@ -73,3 +73,23 @@ OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens) {
 
   return obe;
 }
+
+OrderBookEntry CSVReader::stringsToOBE(std::string priceString,
+                                       std::string amountString,
+                                       std::string timestamp,
+                                       std::string product,
+                                       OrderBookType orderType) {
+  double price, amount;
+  try {
+    double price = std::stod(priceString);
+    double amount = std::stod(amountString);
+
+  } catch (std::exception& e) {
+    std::cout << "Bad float: " << priceString << " " << amountString
+              << std::endl;
+    throw;
+  }
+
+  OrderBookEntry obe{price, amount, timestamp, product, orderType};
+  return obe;
+}
