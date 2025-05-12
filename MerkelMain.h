@@ -3,6 +3,7 @@
 
 #include "OrderBook.h"
 #include "OrderBookEntry.h"
+#include "Wallet.h"
 
 class MerkelMain {
  public:
@@ -21,4 +22,6 @@ class MerkelMain {
   void gotoNextTimeFrame();
   std::string currentTime;
   OrderBook orderBook{"order_book.csv"};
+  Wallet wallet;
+
 };
