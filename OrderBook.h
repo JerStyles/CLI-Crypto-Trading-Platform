@@ -1,23 +1,38 @@
 #pragma once
+#include "OrderBookEntry.h"
+#include "CSVReader.h"
 #include <string>
 #include <vector>
 
-#include "CSVReader.h"
-#include "OrderBookEntry.h"
+class OrderBook
+{
+    public:
+    /** construct, reading a csv data file */
+        OrderBook(std::string filename);
+    /** return vector of all know products in the dataset*/
+        std::vector<std::string> getKnownProducts();
+    /** return vector of Orders according to the sent filters*/
+        std::vector<OrderBookEntry> getOrders(OrderBookType type, 
+                                              std::string product, 
+                                              std::string timestamp);
 
-class OrderBook {
- public:
-  OrderBook(std::string filename);
-  std::vector<std::string> getKnownProducts();
-  std::vector<OrderBookEntry> getOrders(OrderBookType type, std::string product,
-                                        std::string timestamp);
-  void insertOrder(OrderBookEntry& order);
-  std::vector<OrderBookEntry> matchAsksToBids(std::string product, std::string timestamp);
-  std::string getEarliestTime();
-  std::string getNextTime(std::string timestamp);
-  static double getHighPrice(std::vector<OrderBookEntry>& orders);
-  static double getLowPrice(std::vector<OrderBookEntry>& orders);
+        /** returns the earliest time in the orderbook*/
+        std::string getEarliestTime();
+        /** returns the next time after the 
+         * sent time in the orderbook  
+         * If there is no next timestamp, wraps around to the start
+         * */
+        std::string getNextTime(std::string timestamp);
 
- private:
-  std::vector<OrderBookEntry> orders;
+        void insertOrder(OrderBookEntry& order);
+
+        std::vector<OrderBookEntry> matchAsksToBids(std::string product, std::string timestamp);
+
+        static double getHighPrice(std::vector<OrderBookEntry>& orders);
+        static double getLowPrice(std::vector<OrderBookEntry>& orders);
+
+    private:
+        std::vector<OrderBookEntry> orders;
+
+
 };

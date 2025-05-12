@@ -1,27 +1,32 @@
 #pragma once
-#include <vector>
 
-#include "OrderBook.h"
+#include <vector>
 #include "OrderBookEntry.h"
+#include "OrderBook.h"
 #include "Wallet.h"
 
-class MerkelMain {
- public:
-  MerkelMain();
-  void init();
 
- private:
-  void printMenu();
-  int getUserOption();
-  void processUserOption(int userOption);
-  void printHelp();
-  void printMarketStats();
-  void enterAsk();
-  void enterBid();
-  void printWallet();
-  void gotoNextTimeFrame();
-  std::string currentTime;
-  OrderBook orderBook{"order_book.csv"};
-  Wallet wallet;
+class MerkelMain
+{
+    public:
+        MerkelMain();
+        /** Call this to start the sim */
+        void init();
+    private: 
+        void printMenu();
+        void printHelp();
+        void printMarketStats();
+        void enterAsk();
+        void enterBid();
+        void printWallet();
+        void gotoNextTimeframe();
+        int getUserOption();
+        void processUserOption(int userOption);
+
+        std::string currentTime;
+
+        OrderBook orderBook{"20200317.csv"};
+
+        Wallet wallet;
 
 };
