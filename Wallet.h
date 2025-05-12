@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 
+#include "OrderBookEntry.h"
+
 class Wallet {
  public:
   Wallet();
@@ -10,6 +12,7 @@ class Wallet {
   bool removeCurrency(std::string type, double amount);
 
   bool containsCurrency(std::string type, double amount);
+  bool canFulfillOrder(OrderBookEntry order);
   std::string toString();
 
  private:

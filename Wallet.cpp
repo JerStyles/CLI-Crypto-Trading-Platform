@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "CSVReader.h"
+
 Wallet::Wallet() {
 }
 
@@ -26,12 +28,12 @@ bool Wallet::removeCurrency(std::string type, double amount) {
   }
 
   if (currencies.count(type) == 0) {
-    std::cout << "No currency for "  << type << std::endl;
+    std::cout << "No currency for " << type << std::endl;
     return false;
 
   } else {
     if (containsCurrency(type, amount)) {
-        std::cout << "Removing " << type << ": " << amount << std::endl;
+      std::cout << "Removing " << type << ": " << amount << std::endl;
       currencies[type] -= amount;
       return true;
     } else {
@@ -56,4 +58,26 @@ std::string Wallet::toString() {
     s += currency + " : " + std::to_string(amount) + "\n";
   }
   return s;
+}
+
+bool Wallet::canFulfillOrder(OrderBookEntry order) {
+  std::vector<std::string> currs = CSVReader::tokenize(order.product, '/');
+  // ask
+  if (order.orderType == OrderBookType::ask) {
+    double amount = order.amount;
+    std::string currency = currs[0];
+    std::cout << "Wallet::canFulfillOrder " << currency << " : " << amount
+              << std::endl;
+    return containsCurrency(currency, amount);
+  }
+
+  // bid
+  if (order.orderType == OrderBookType::bid) {
+    double amount = order.amount * order.price;
+    std::string currency = currs[1];
+    std::cout << "Wallet::canFulfillOrder " << currency << " : " << amount
+              << std::endl;
+    return containsCurrency(currency, amount);
+  }
+  return false;
 }
